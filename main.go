@@ -7,6 +7,8 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/gebhartn/impression/files"
+	"github.com/gebhartn/impression/handlers"
 	gohandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/hashicorp/go-hclog"
@@ -21,6 +23,8 @@ func getEnv(key, fallback string) string {
 
 var bindAddress = getEnv("BIND_ADDRESS", ":9090")
 var logLevel = getEnv("LOG_LEVEL", "debug")
+
+// todo: we'll use this as a temp store on the filesystem until an s3 implementation is in
 var basePath = getEnv("BASE_PATH", "./imagestore")
 
 func main() {
@@ -35,16 +39,26 @@ func main() {
 
 	sl := l.StandardLogger(&hclog.StandardLoggerOptions{InferLevels: true})
 
-	// todo: initialize the store w/ max file size
-	// todo: create handlers/attach [new files, gzip]
+	store, err := files.NewLocal(basePath, 1024*1000*5)
+	if err != nil {
+		l.Error("Unable to create storage", "error", err)
+		os.Exit(1)
+	}
+
+	fh := handlers.NewFiles(store, l)
+	mw := handlers.GzipHandler{}
 
 	sm := mux.NewRouter()
 	ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"*"}))
 
+	ph := sm.Methods(http.MethodPut).Subrouter()
 	// todo: route upload files
-	// todo: route get files
+	ph.HandleFunc("/images/{id:[0-9]+}/{filename:[a-zA-Z]+}", fh.UploadREST)
 
-	// todo: compression
+	gh := sm.Methods(http.MethodGet).Subrouter()
+	// todo: route get files
+	gh.Handle("/images/{id:[0-9]+}/{filename:[a-zA-Z]+}", http.StripPrefix("/images/", http.FileServer(http.Dir(basePath))))
+	gh.Use(mw.GzipMiddleware)
 
 	s := http.Server{
 		Addr:         bindAddress,
