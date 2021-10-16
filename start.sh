@@ -2,4 +2,4 @@
 chmod o+w ./database
 docker-compose up
 docker-compose down
-rm -f ./database/README
+rm -f ./database/impress.db
