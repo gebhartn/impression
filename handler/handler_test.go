@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/gebhartn/impress/aws"
 	"github.com/gebhartn/impress/db"
+	"github.com/gebhartn/impress/model"
 	"github.com/gebhartn/impress/router"
 	"github.com/gebhartn/impress/s3"
 	"github.com/gebhartn/impress/store"
@@ -44,6 +45,8 @@ func setup() {
 
 	h = New(us, s3s)
 	e = router.New()
+
+	loadFixures()
 }
 
 func tearDown() {
@@ -57,4 +60,21 @@ func responseMap(bs []byte, key string) map[string]interface{} {
 	var m map[string]interface{}
 	json.Unmarshal(bs, &m)
 	return m[key].(map[string]interface{})
+}
+
+func loadFixures() error {
+	u := model.User{
+		Username: "testuser",
+	}
+	u.Password, _ = u.HashPassword("testpass")
+
+	if err := us.Create(&u); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func authHeader(token string) string {
+	return "Token " + token
 }
