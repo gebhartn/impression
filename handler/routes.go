@@ -20,4 +20,8 @@ func (h *Handler) Register(r *fiber.App) {
 
 	user := v1.Group("/user", auth)
 	user.Get("", h.CurrentUser)
+
+	// TODO: Get the user ID from the auth middleware instead
+	images := v1.Group("/images")
+	images.Post("/:slug", h.UploadFile)
 }
