@@ -20,8 +20,7 @@ func main() {
 
 	h.Register(r)
 
-	err := r.Listen(":8080")
-	if err != nil {
+	if err := r.Listen(":8080"); err != nil {
 		fmt.Printf("%v", err)
 	}
 }
