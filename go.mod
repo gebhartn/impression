@@ -4,9 +4,10 @@ go 1.17
 
 require (
 	github.com/aws/aws-sdk-go v1.41.4
-	github.com/form3tech-oss/jwt-go v3.2.5+incompatible
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/gofiber/fiber/v2 v2.20.2
+	github.com/gofiber/jwt/v2 v2.2.7
+	github.com/golang-jwt/jwt/v4 v4.0.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/mattn/go-sqlite3 v1.14.8
 	github.com/stretchr/testify v1.7.0
