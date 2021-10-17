@@ -12,9 +12,11 @@ import (
 func (h *Handler) SignUp(c *fiber.Ctx) error {
 	var u model.User
 	req := &userRegisterRequest{}
+
 	if err := req.bind(c, &u, h.validator); err != nil {
 		return c.Status(http.StatusUnprocessableEntity).JSON(utils.NewError(err))
 	}
+
 	if err := h.user.Create(&u); err != nil {
 		return c.Status(http.StatusUnprocessableEntity).JSON(utils.NewError(err))
 	}
@@ -34,9 +36,11 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(utils.NewError(err))
 	}
+
 	if u == nil {
 		return c.Status(http.StatusForbidden).JSON(utils.AccessForbidden())
 	}
+
 	if !u.CheckPassword(req.User.Password) {
 		fmt.Printf("wrong password %v", err)
 		return c.Status(http.StatusForbidden).JSON(utils.AccessForbidden())
