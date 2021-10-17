@@ -1,17 +1,22 @@
 package handler
 
-import "github.com/gebhartn/impress/user"
+import (
+	"github.com/gebhartn/impress/s3"
+	"github.com/gebhartn/impress/user"
+)
 
 type Handler struct {
 	user      user.Store
+	s3        s3.Store
 	validator *Validator
 }
 
-func NewHandler(us user.Store) *Handler {
+func NewHandler(us user.Store, s3 s3.Store) *Handler {
 	v := NewValidator()
 
 	return &Handler{
 		user:      us,
+		s3:        s3,
 		validator: v,
 	}
 }
