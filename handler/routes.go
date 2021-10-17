@@ -9,4 +9,5 @@ func (h *Handler) Register(r *fiber.App) {
 
 	guests := v1.Group("/users")
 	guests.Post("", h.SignUp)
+	guests.Post("/login", h.Login)
 }

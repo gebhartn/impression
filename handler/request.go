@@ -31,3 +31,22 @@ func (r *userRegisterRequest) bind(c *fiber.Ctx, u *model.User, v *Validator) er
 
 	return nil
 }
+
+type userLoginRequest struct {
+	User struct {
+		Username string `json:"username" validate:"required"`
+		Password string `json:"password" validate:"required"`
+	} `json:"user"`
+}
+
+func (r *userLoginRequest) bind(c *fiber.Ctx, v *Validator) error {
+	if err := c.BodyParser(r); err != nil {
+		return err
+	}
+
+	if err := v.Validate(r); err != nil {
+		return err
+	}
+
+	return nil
+}
