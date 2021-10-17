@@ -31,7 +31,7 @@ run:
 	go run -race .
 
 run-container:
-	chmod o+w ./database && docker run -p 8080:8080 -v "$(pwd)"/database:/app/database "$(APP)_app":latest
+	chmod o+w ./database && docker run -p 8080:8080 -v "$(pwd)"/database:/app/database "$(APP)":latest
 
 test:
 	go test -v ./...
