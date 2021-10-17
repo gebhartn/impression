@@ -13,7 +13,6 @@ type userRegisterRequest struct {
 }
 
 func (r *userRegisterRequest) bind(c *fiber.Ctx, u *model.User, v *Validator) error {
-
 	if err := c.BodyParser(r); err != nil {
 		return err
 	}

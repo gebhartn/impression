@@ -24,3 +24,11 @@ func AccessForbidden() Error {
 
 	return e
 }
+
+func NotFound() Error {
+	e := Error{}
+	e.Errors = make(map[string]interface{})
+	e.Errors["body"] = "not found"
+
+	return e
+}
