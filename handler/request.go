@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"mime/multipart"
+	"strconv"
+
 	"github.com/gebhartn/impress/model"
 	"github.com/gofiber/fiber/v2"
 )
@@ -46,6 +49,30 @@ func (r *userLoginRequest) bind(c *fiber.Ctx, v *Validator) error {
 	if err := v.Validate(r); err != nil {
 		return err
 	}
+
+	return nil
+}
+
+type imageUploadRequest struct {
+	Image struct {
+		Owner uint
+		File  *multipart.FileHeader
+	}
+}
+
+func (r *imageUploadRequest) bind(c *fiber.Ctx, i *model.Image, v *Validator) error {
+	fh, err := c.FormFile("image")
+	if err != nil {
+		return err
+	}
+
+	o, err := strconv.Atoi(c.Params("slug"))
+	if err != nil {
+		return err
+	}
+
+	r.Image.File = fh
+	r.Image.Owner = uint(o)
 
 	return nil
 }
