@@ -23,10 +23,10 @@ func New() *gorm.DB {
 }
 
 func TestDB() *gorm.DB {
-	db, err := gorm.Open("sqlite3", "./database/impress_test.db")
+	db, err := gorm.Open("sqlite3", "./../database/test.db")
 
 	if err != nil {
-		fmt.Println("[ERROR] database error", err)
+		fmt.Println("[ERROR] NICK! database error", err)
 	}
 
 	db.DB().SetMaxIdleConns(3)
@@ -36,7 +36,7 @@ func TestDB() *gorm.DB {
 }
 
 func Drop() error {
-	if err := os.Remove("./../datbase/impress.db"); err != nil {
+	if err := os.Remove("./../database/test.db"); err != nil {
 		return err
 	}
 	return nil
