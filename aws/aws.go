@@ -12,3 +12,11 @@ func New() *session.Session {
 	}))
 	return s
 }
+
+// TODO: Need to pass credentials for the test bucket
+func TestSession() *session.Session {
+	s := session.Must(session.NewSession(&aws.Config{
+		Region: aws.String(endpoints.UsWest2RegionID),
+	}))
+	return s
+}
