@@ -20,8 +20,8 @@ func main() {
 	s3 := store.NewS3Store(a)
 	us := store.NewUserStore(d)
 
-	r := router.NewRouter()
-	h := handler.NewHandler(us, s3)
+	r := router.New()
+	h := handler.New(us, s3)
 
 	h.Register(r)
 
