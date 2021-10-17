@@ -11,7 +11,7 @@ type Handler struct {
 	validator *Validator
 }
 
-func NewHandler(us user.Store, s3 s3.Store) *Handler {
+func New(us user.Store, s3 s3.Store) *Handler {
 	v := NewValidator()
 
 	return &Handler{

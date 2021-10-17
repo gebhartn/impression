@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-func NewRouter() *fiber.App {
+func New() *fiber.App {
 	r := fiber.New()
 	r.Use(logger.New())
 	r.Use(cors.New(cors.Config{
