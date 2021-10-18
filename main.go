@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-
 	a := aws.New()
 	d := db.New()
 
