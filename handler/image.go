@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -42,8 +41,6 @@ func (h *Handler) GetUploads(c *fiber.Ctx) error {
 	if len(is.Contents) == 1 {
 		return c.Status(http.StatusNotFound).JSON(utils.NotFound())
 	}
-
-	fmt.Printf("\n%v\n", is)
 
 	return c.Status(http.StatusOK).JSON((newUserImagesReponse(is)))
 }
