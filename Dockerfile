@@ -1,7 +1,7 @@
 ## Build
 FROM golang:1.17-alpine3.14 AS builder
 
-RUN apk add --update gcc musl-dev
+RUN apk add --update gcc musl-dev ca-certificates && rm -rf /var/cache/apk/*
 RUN mkdir -p /app
 ADD . /app
 WORKDIR /app
@@ -19,6 +19,7 @@ RUN chown app: ./database
 FROM scratch
 
 COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 USER app
 
 WORKDIR /app
