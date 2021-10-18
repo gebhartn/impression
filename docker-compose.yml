@@ -1,6 +1,9 @@
 version: "2"
 services:
   app:
+    environment:
+      - AWS_ACCESS_KEY="${AWS_ACCESS_KEY}"
+      - AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
     build: .
     ports:
       - "8080:8080"
