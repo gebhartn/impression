@@ -17,10 +17,11 @@ func main() {
 	db.AutoMigrate(d)
 
 	s3 := store.NewS3Store(a)
-	us := store.NewUserStore(d)
+	user := store.NewUserStore(d)
+	image := store.NewImageStore(d)
 
 	r := router.New()
-	h := handler.New(us, s3)
+	h := handler.New(user, s3, image)
 
 	h.Register(r)
 
