@@ -22,5 +22,6 @@ func (h *Handler) Register(r *fiber.App) {
 	user.Get("", h.CurrentUser)
 
 	images := v1.Group("/images", auth)
+	images.Get("", h.GetUploads)
 	images.Post("/upload", h.UploadFile)
 }
