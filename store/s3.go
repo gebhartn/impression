@@ -14,7 +14,7 @@ import (
 
 var (
 	bucket = "impression-int"
-	prefix = "Users"
+	prefix = "users"
 )
 
 type S3Store struct {
@@ -63,39 +63,37 @@ func (s *S3Store) ListObjectsById(id uint) (*s3.ListObjectsV2Output, error) {
 	return res, nil
 }
 
-func (s *S3Store) UploadObject(id uint, f *multipart.FileHeader) (*s3manager.UploadOutput, error) {
+func (s *S3Store) UploadObject(id uint, f *multipart.FileHeader) (string, error) {
 	p := getUserBucket(id)
+	e := path.Ext(f.Filename)
+	ct := f.Header.Get("Content-Type")
 
-	key, err := getKeyName(f.Filename, p)
-	if err != nil {
-		return nil, err
-	}
-
-	file, err := f.Open()
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := s.u.Upload(&s3manager.UploadInput{
-		Bucket: &bucket,
-		Key:    &key,
-		Body:   file,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
-}
-
-func getKeyName(f string, p string) (string, error) {
 	u, err := uuid.NewV4()
 	if err != nil {
 		return "", err
 	}
-	e := path.Ext(f)
-	key := fmt.Sprintf("%s/%s%s", p, u, e)
-	return key, nil
+
+	// id/filename.ext
+	fp := fmt.Sprintf("%s/%s%s", p, u, e)
+
+	file, err := f.Open()
+	if err != nil {
+		return "", err
+	}
+
+	if _, err = s.u.Upload(&s3manager.UploadInput{
+		Bucket:      &bucket,
+		Key:         &fp,
+		Body:        file,
+		ContentType: &ct,
+	}); err != nil {
+		return "", err
+	}
+
+	// filename.ext
+	res := fmt.Sprintf("%s%s", u, e)
+
+	return res, nil
 }
 
 func getUserBucket(id uint) string {
