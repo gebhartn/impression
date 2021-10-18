@@ -19,3 +19,16 @@ func newUserResponse(u *model.User) *userResponse {
 
 	return &r
 }
+
+type imageUploadResponse struct {
+	Image struct {
+		Key string `json:"key"`
+	} `json:"image"`
+}
+
+func newImageUploadResponse(i *model.Image) *imageUploadResponse {
+	r := imageUploadResponse{}
+	r.Image.Key = i.Key
+
+	return &r
+}
