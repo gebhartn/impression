@@ -7,6 +7,7 @@ type Image struct {
 	Owner     User
 	Public    bool   `gorm:"default:false"`
 	Favorites []User `gorm:"many2many:favorites;"`
+	Key       string
 }
 
 func (i *Image) IsPublic() bool {
