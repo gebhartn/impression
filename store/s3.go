@@ -15,6 +15,7 @@ import (
 var (
 	bucket = "impression-int"
 	prefix = "users"
+	cdn    = "http://d1gwcjfvlob5vn.cloudfront.net"
 )
 
 type S3Store struct {
@@ -91,7 +92,8 @@ func (s *S3Store) UploadObject(id uint, f *multipart.FileHeader) (string, error)
 	}
 
 	// filename.ext
-	res := fmt.Sprintf("%s%s", u, e)
+	// res := fmt.Sprintf("%s%s", u, e)
+	res := fmt.Sprintf("%s/%s/%s%s", cdn, p, u, e)
 
 	return res, nil
 }
