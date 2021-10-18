@@ -3,6 +3,7 @@ package store
 import (
 	"fmt"
 	"mime/multipart"
+	"os"
 	"path"
 	"strconv"
 
@@ -13,9 +14,9 @@ import (
 )
 
 var (
-	bucket = "impression-int"
-	prefix = "users"
-	cdn    = "http://d1gwcjfvlob5vn.cloudfront.net"
+	bucket = os.Getenv("BUCKET_NAME")
+	prefix = os.Getenv("PREFIX_NAME")
+	cdn    = os.Getenv("CDN")
 )
 
 type S3Store struct {
@@ -74,7 +75,6 @@ func (s *S3Store) UploadObject(id uint, f *multipart.FileHeader) (string, error)
 		return "", err
 	}
 
-	// id/filename.ext
 	fp := fmt.Sprintf("%s/%s%s", p, u, e)
 
 	file, err := f.Open()
@@ -91,8 +91,6 @@ func (s *S3Store) UploadObject(id uint, f *multipart.FileHeader) (string, error)
 		return "", err
 	}
 
-	// filename.ext
-	// res := fmt.Sprintf("%s%s", u, e)
 	res := fmt.Sprintf("%s/%s/%s%s", cdn, p, u, e)
 
 	return res, nil
