@@ -4,6 +4,10 @@ services:
     environment:
       - AWS_ACCESS_KEY="${AWS_ACCESS_KEY}"
       - AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
+      - JWT_SECRET="${JWT_SECRET}"
+      - BUCKET_NAME="${BUCKET_NAME}"
+      - PREFIX_NAME="${PREFIX_NAME}"
+      - CDN="${CDN}"
     build: .
     ports:
       - "8080:8080"
