@@ -16,11 +16,13 @@ func (h *Handler) UploadFile(c *fiber.Ctx) error {
 		return c.Status(http.StatusUnprocessableEntity).JSON(utils.NewError(err))
 	}
 
-	_, err := h.s3.UploadObject(r.Image.Owner, r.Image.File)
+	key, err := h.s3.UploadObject(r.Image.Owner, r.Image.File)
 
 	if err != nil {
-		return err
+		return c.Status(http.StatusInternalServerError).JSON(utils.NewError(err))
 	}
 
-	return nil
+	i.Key = key
+
+	return c.Status(http.StatusCreated).JSON(newImageUploadResponse(&i))
 }
